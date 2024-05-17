@@ -22,9 +22,11 @@ These are my most important neovim bindings:
 - `bd`: delete current buffer
 - `c-s-right arrow` or `bn`: next buffer
 - `c-s-left arrow` or `bp`: previous buffer
+- `v i <key>`: select text between `<key>` where `<key>` can be `'`, `"`,  `(`
 - `<leader>` is mapped to the space key in my config
 
 ## References
 
 - [Nice complete Neovim config](https://github.com/adriankarlen/nvim/)
 - [Another nice example](https://github.com/cksidharthan/nvim)
+- [Yet another nice example](https://github.com/olimorris/dotfiles)
