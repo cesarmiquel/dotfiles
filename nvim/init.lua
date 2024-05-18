@@ -7,11 +7,8 @@ vim.g.mapleader = ' '
 
 --
 -- Plugins loaded with lazy.nvim
--- @TODO: migrate everything to lazy.nvim
 --
 
---[[
-]]--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
@@ -36,8 +33,17 @@ plugins = {
         require'alpha'.setup(require'alpha.themes.theta'.config)
     end
   },
-  { 'morhetz/gruvbox' },
-  { 'neoclide/coc.nvim' },
+  { 
+    'morhetz/gruvbox',
+    config = function()
+      -- load the colorscheme here
+      vim.cmd.colorscheme('gruvbox')
+    end,
+  },
+  {
+    'neoclide/coc.nvim',
+    branch = 'release'
+  },
   -- solarized color scheme
   { 'altercation/vim-colors-solarized' },
 
@@ -48,14 +54,24 @@ plugins = {
   { 'rhysd/conflict-marker.vim' },
 
   -- Change status line
-  { 'vim-airline/vim-airline' },
-  { 'vim-airline/vim-airline-themes' },
+  {
+    'vim-airline/vim-airline-themes',
+    dependencies = {
+      'vim-airline/vim-airline',
+    },
+    config = function()
+      -- Configuracion de tabs para airlie
+      vim.g["airline#extensions#tabline#enabled"] = 1
+      vim.g["airline#extensions#tabline#formatter"] = 'unique_tail'
+      vim.g["airline_theme"] = 'wombat'
+    end,
+  },
 
   -- Ctrl-p
   { 'ctrlpvim/ctrlp.vim' },
 
   -- Asynchronous Lint Engine (ALE)
-  { 'w0rp/ale' },
+  -- { 'w0rp/ale' },
 
   -- Javascript syntax highlighting and indentation
   { 'pangloss/vim-javascript' },
@@ -96,8 +112,12 @@ plugins = {
   { 'wsdjeg/FlyGrep.vim' },
 
   -- Prosession session management
-  { 'tpope/vim-obsession' },
-  { 'dhruvasagar/vim-prosession' },
+  {
+    'dhruvasagar/vim-prosession',
+    dependencies = {
+      'tpope/vim-obsession'
+    }
+  },
 
   -- JSON with Comment
   { 'kevinoid/vim-jsonc' },
@@ -120,9 +140,6 @@ plugins = {
 
   -- We recommend updating the parsers on update
   --{('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'}) },
-
-  -- Nord colorscheme
-  { 'arcticicestudio/nord-vim' },
 
   -- Harpoon
   { 'nvim-lua/plenary.nvim' }, -- don't forget to add this one if you don't have it yet!
@@ -149,7 +166,6 @@ vim.cmd('syntax enable')
 --let g:solarized_termcolors=256
 --colorscheme solarized
 vim.g.gruvbox_contrast_dark='hard'
-vim.cmd.colorscheme('gruvbox')
 
 -- Show line numbers
 vim.o.number = true
@@ -166,7 +182,6 @@ vim.o.expandtab    = true
 vim.o.tabstop      = 4
 vim.o.softtabstop  = 4
 vim.o.shiftwidth   = 4
-
 
 -- CtrlP (new fuzzy finder)
 vim.g.ctrlp_map = ',e'
@@ -230,11 +245,6 @@ vim.g.closetag_filetypes = 'javascript,jsx,javascriptreact,html,xhtml,phtml'
 
 -- Powerline configuration
 vim.g.airline_powerline_fonts = 1
-
--- Configuracion de tabs para airlie
-vim.g["airline#extensions#tabline#enabled"] = 1
-vim.g["airline#extensions#tabline#formatter"] = 'unique_tail'
-vim.g["airline_theme"] = 'wombat'
 
 -- set filetypes as typescriptreact
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
@@ -546,3 +556,5 @@ highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 
 ]]--
+
+-- vim: se ts=2 sw=2 ai expandtab:
