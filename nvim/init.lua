@@ -5,106 +5,137 @@
 -- Change <leader> to space
 vim.g.mapleader = ' '
 
-local Plug = vim.fn['plug#']
-vim.call('plug#begin')
+--
+-- Plugins loaded with lazy.nvim
+-- @TODO: migrate everything to lazy.nvim
+--
 
--- solarized color scheme
-Plug 'altercation/vim-colors-solarized'
+--[[
+]]--
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- add git markers to gutter to indicate new lines, etc
-Plug 'airblade/vim-gitgutter'
+plugins = {
+  {
+    'goolord/alpha-nvim',
+    dependencies = {
+        'nvim-tree/nvim-web-devicons',
+        'nvim-lua/plenary.nvim'
+    },
+    config = function ()
+        require'alpha'.setup(require'alpha.themes.theta'.config)
+    end
+  },
+  { 'morhetz/gruvbox' },
+  { 'neoclide/coc.nvim' },
+  -- solarized color scheme
+  { 'altercation/vim-colors-solarized' },
 
--- Solve git conflicts
-Plug 'rhysd/conflict-marker.vim'
+  -- add git markers to gutter to indicate new lines, etc
+  { 'airblade/vim-gitgutter' },
 
--- Change status line
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+  -- Solve git conflicts
+  { 'rhysd/conflict-marker.vim' },
 
--- Ctrl-p
-Plug 'ctrlpvim/ctrlp.vim'
+  -- Change status line
+  { 'vim-airline/vim-airline' },
+  { 'vim-airline/vim-airline-themes' },
 
--- Asynchronous Lint Engine (ALE)
-Plug 'w0rp/ale'
+  -- Ctrl-p
+  { 'ctrlpvim/ctrlp.vim' },
 
--- Javascript syntax highlighting and indentation
-Plug 'pangloss/vim-javascript'
+  -- Asynchronous Lint Engine (ALE)
+  { 'w0rp/ale' },
 
--- JS + JSX: https://github.com/MaxMEllon/vim-jsx-pretty
-Plug 'yuezk/vim-js'
-Plug 'maxmellon/vim-jsx-pretty'
+  -- Javascript syntax highlighting and indentation
+  { 'pangloss/vim-javascript' },
 
--- TSX (Typescript + React) support
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
+  -- JS + JSX: https://github.com/MaxMEllon/vim-jsx-pretty
+  { 'yuezk/vim-js' },
+  { 'maxmellon/vim-jsx-pretty' },
 
--- Another nice colorscheme: https://github.com/morhetz/gruvbox/wiki/Configuration
-Plug 'morhetz/gruvbox'
+  -- TSX (Typescript + React) support
+  { 'leafgarland/typescript-vim' },
+  { 'peitalin/vim-jsx-typescript' },
 
--- Markdown
-Plug 'plasticboy/vim-markdown'
+  -- Another nice colorscheme: https://github.com/morhetz/gruvbox/wiki/Configuration
+  -- Plug 'morhetz/gruvbox'
 
--- indent lines
-Plug 'yggdroot/indentline'
+  -- Markdown
+  { 'plasticboy/vim-markdown' },
 
--- For autocomplete
-Plug('neoclide/coc.nvim', {branch = 'release'})
+  -- indent lines
+  { 'yggdroot/indentline' },
 
--- Tagalong: open/close HTML tags
-Plug 'AndrewRadev/tagalong.vim'
+  -- For autocomplete
+  -- Plug('neoclide/coc.nvim', {branch = 'release'})
 
--- Autoclose HTML tags
-Plug 'alvan/vim-closetag'
+  -- Tagalong: open/close HTML tags
+  { 'AndrewRadev/tagalong.vim' },
 
--- Nerdtree
-Plug 'scrooloose/nerdtree'
+  -- Autoclose HTML tags
+  { 'alvan/vim-closetag' },
 
--- Support for dustjs
-Plug 'jimmyhchan/dustjs.vim'
+  -- Nerdtree
+  { 'scrooloose/nerdtree' },
 
--- For on the fly grep
-Plug 'wsdjeg/FlyGrep.vim'
+  -- Support for dustjs
+  { 'jimmyhchan/dustjs.vim' },
 
--- Prosession session management
-Plug 'tpope/vim-obsession'
-Plug 'dhruvasagar/vim-prosession'
+  -- For on the fly grep
+  { 'wsdjeg/FlyGrep.vim' },
 
--- JSON with Comment
-Plug 'kevinoid/vim-jsonc'
+  -- Prosession session management
+  { 'tpope/vim-obsession' },
+  { 'dhruvasagar/vim-prosession' },
 
--- Show marks on margin
-Plug 'kshenoy/vim-signature'
+  -- JSON with Comment
+  { 'kevinoid/vim-jsonc' },
 
--- Syntax highlight for Twig
-Plug 'qbbr/vim-twig'
+  -- Show marks on margin
+  { 'kshenoy/vim-signature' },
 
--- Syntax highlight for Blade
-Plug 'jwalton512/vim-blade'
+  -- Syntax highlight for Twig
+  { 'qbbr/vim-twig' },
 
--- Syntax highlight renpy
-Plug 'chaimleib/vim-renpy'
+  -- Syntax highlight for Blade
+  { 'jwalton512/vim-blade' },
 
--- Telscope
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+  -- Syntax highlight renpy
+  { 'chaimleib/vim-renpy' },
 
--- We recommend updating the parsers on update
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
+  -- Telscope
+  { 'nvim-lua/plenary.nvim' },
+  { 'nvim-telescope/telescope.nvim' },
 
--- Nord colorscheme
-Plug 'arcticicestudio/nord-vim'
+  -- We recommend updating the parsers on update
+  --{('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'}) },
 
--- Harpoon
-Plug 'nvim-lua/plenary.nvim' -- don't forget to add this one if you don't have it yet!
-Plug 'ThePrimeagen/harpoon'
+  -- Nord colorscheme
+  { 'arcticicestudio/nord-vim' },
 
--- Kickasm syntax
-Plug 'gryf/kickass-syntax-vim'
+  -- Harpoon
+  { 'nvim-lua/plenary.nvim' }, -- don't forget to add this one if you don't have it yet!
+  { 'ThePrimeagen/harpoon' },
 
--- GLSL syntax
-Plug 'tikhomirov/vim-glsl'
+  -- Kickasm syntax
+  { 'gryf/kickass-syntax-vim' },
 
-vim.call('plug#end')
+  -- GLSL syntax
+  { 'tikhomirov/vim-glsl' },
+}
+require("lazy").setup(plugins, opts)
+
 
 --
 -- CONFIGURATION
