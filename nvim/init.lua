@@ -38,11 +38,23 @@ plugins = {
     config = function()
       -- load the colorscheme here
       vim.cmd.colorscheme('gruvbox')
+      -- Configuration for Solarized
+      --set background=dark
+      --let g:solarized_termcolors=256
+      --colorscheme solarized
+      vim.g.gruvbox_contrast_dark='hard'
     end,
   },
   {
     'neoclide/coc.nvim',
-    branch = 'release'
+    branch = 'release',
+    config = function()
+      -- COC autocomplete. Use <TAB> to autocomplete
+      -- Make <CR> to accept selected completion item or notify coc.nvim to format
+      -- <C-g>u breaks current undo, please make your own choice
+      -- vim.map.set('i', '<silent><expr>', '<CR> coc#pum#visible() ? coc#pum#confirm()\: "<C-g>u<CR><c-r>=coc#on_enter()<CR>"')
+      vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true, silent = true })
+    end
   },
   -- solarized color scheme
   { 'altercation/vim-colors-solarized' },
@@ -55,15 +67,33 @@ plugins = {
 
   -- Change status line
   {
-    'vim-airline/vim-airline-themes',
+    'vim-airline/vim-airline',
     dependencies = {
-      'vim-airline/vim-airline',
+      'vim-airline/vim-airline-themes',
     },
     config = function()
       -- Configuracion de tabs para airlie
       vim.g["airline#extensions#tabline#enabled"] = 1
       vim.g["airline#extensions#tabline#formatter"] = 'unique_tail'
       vim.g["airline_theme"] = 'wombat'
+
+      -- Powerline configuration
+      vim.g.airline_powerline_fonts = 1
+
+      -- powerline symbols
+      vim.g.airline_left_sep = ''
+      vim.g.airline_left_alt_sep = ''
+      vim.g.airline_right_sep = ''
+      vim.g.airline_right_alt_sep = ''
+      vim.g.airline_symbols.branch = ''
+      vim.g.airline_symbols.colnr = ' ℅:'
+      vim.g.airline_symbols.readonly = ''
+      vim.g.airline_symbols.linenr = ' :'
+      vim.g.airline_symbols.maxlinenr = '☰ '
+      vim.g.airline_symbols.dirty='⚡'
+      vim.g.airline_symbols.branch = '⎇'
+      vim.g.airline_symbols.linenr = '¶'
+
     end,
   },
 
@@ -71,7 +101,7 @@ plugins = {
   { 'ctrlpvim/ctrlp.vim' },
 
   -- Asynchronous Lint Engine (ALE)
-  -- { 'w0rp/ale' },
+  { 'w0rp/ale' },
 
   -- Javascript syntax highlighting and indentation
   { 'pangloss/vim-javascript' },
@@ -84,17 +114,11 @@ plugins = {
   { 'leafgarland/typescript-vim' },
   { 'peitalin/vim-jsx-typescript' },
 
-  -- Another nice colorscheme: https://github.com/morhetz/gruvbox/wiki/Configuration
-  -- Plug 'morhetz/gruvbox'
-
   -- Markdown
   { 'plasticboy/vim-markdown' },
 
   -- indent lines
   { 'yggdroot/indentline' },
-
-  -- For autocomplete
-  -- Plug('neoclide/coc.nvim', {branch = 'release'})
 
   -- Tagalong: open/close HTML tags
   { 'AndrewRadev/tagalong.vim' },
@@ -161,12 +185,6 @@ require("lazy").setup(plugins, opts)
 -- Enable syntax highlighting
 vim.cmd('syntax enable')
 
--- Configuration for Solarized
---set background=dark
---let g:solarized_termcolors=256
---colorscheme solarized
-vim.g.gruvbox_contrast_dark='hard'
-
 -- Show line numbers
 vim.o.number = true
 
@@ -179,9 +197,9 @@ vim.o.incsearch  = true
 
 -- default tabs and spaces handling
 vim.o.expandtab    = true
-vim.o.tabstop      = 4
-vim.o.softtabstop  = 4
-vim.o.shiftwidth   = 4
+vim.o.tabstop      = 2
+vim.o.softtabstop  = 2
+vim.o.shiftwidth   = 2
 
 -- CtrlP (new fuzzy finder)
 vim.g.ctrlp_map = ',e'
@@ -208,7 +226,7 @@ vim.o.timeoutlen = 200
 
 -- tabs / indent exceptions
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "javascript, javascriptreact, javascript.jsx, html, blade, twig",
+  pattern = "javascript, javascriptreact, javascript.jsx, html, blade, twig, php",
   callback = function(args)
     vim.o.tabstop      = 2
     vim.o.softtabstop  = 2
@@ -242,9 +260,6 @@ vim.g.tagalong_additional_filetypes = {'html', 'xml', 'jsx', 'eruby', 'ejs', 'ec
 
 -- Configure closetag
 vim.g.closetag_filetypes = 'javascript,jsx,javascriptreact,html,xhtml,phtml'
-
--- Powerline configuration
-vim.g.airline_powerline_fonts = 1
 
 -- set filetypes as typescriptreact
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
@@ -282,12 +297,6 @@ vim.keymap.set('n', '<leader>b', '<cmd>Telescope buffers<cr>')
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
 vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
 vim.keymap.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
-
--- COC autocomplete. Use <TAB> to autocomplete
--- Make <CR> to accept selected completion item or notify coc.nvim to format
--- <C-g>u breaks current undo, please make your own choice
--- vim.map.set('i', '<silent><expr>', '<CR> coc#pum#visible() ? coc#pum#confirm()\: "<C-g>u<CR><c-r>=coc#on_enter()<CR>"')
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true, silent = true })
 
 -- Git conflict resolver
 -- disable the default highlight group
