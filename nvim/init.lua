@@ -33,7 +33,7 @@ plugins = {
         require'alpha'.setup(require'alpha.themes.theta'.config)
     end
   },
-  { 
+  {
     'morhetz/gruvbox',
     config = function()
       -- load the colorscheme here
@@ -174,9 +174,37 @@ plugins = {
 
   -- GLSL syntax
   { 'tikhomirov/vim-glsl' },
+
+  -- Codeium
+  {
+    'Exafunction/codeium.vim',
+    config = function ()
+      -- Change '<C-g>' here to any keycode you like.
+      vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+    end
+  },
+
+  -- Noice
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
+  }
 }
 require("lazy").setup(plugins, opts)
-
 
 --
 -- CONFIGURATION
@@ -312,8 +340,23 @@ vim.g.conflict_marker_end   = '^>>>>>>> .*$'
 --highlight ConflictMarkerEnd guibg=#2f628e
 --highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
-
-
+--
+-- Show whitespaces
+--
+vim.o.termguicolors = true
+vim.o.mouse = ''
+vim.cmd [[syn on]]
+vim.g.show_whitespace = 1
+if vim.g.show_whitespace then
+  local ag = vim.api.nvim_create_augroup('show_whitespace', { clear = true })
+  vim.api.nvim_create_autocmd('Syntax', {
+    pattern = '*',
+    command = [[syntax match Tab /\v\t/ containedin=ALL | syntax match TrailingWS /\v\s\ze\s*$/ containedin=ALL]],
+    group = ag,
+  })
+  vim.cmd [[highlight Tab ctermbg=240 ctermfg=240 guibg=Grey50 guifg=Grey50]]
+  vim.cmd [[highlight TrailingWS ctermbg=203 ctermfg=203 guibg=IndianRed1 guifg=IndianRed1]]
+end
 
 --[[
 
@@ -323,7 +366,7 @@ vim.g.conflict_marker_end   = '^>>>>>>> .*$'
 if exists('g:GtkGuiLoaded')
   " some code here
   call rpcnotify(1, 'Gui', 'Font', 'Monoid Regular 10')
-  let g:GuiInternalClipboard = 1 
+  let g:GuiInternalClipboard = 1
 endif
 
 -- ----------------------------------------------------------------------------------
