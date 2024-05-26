@@ -5,106 +5,217 @@
 -- Change <leader> to space
 vim.g.mapleader = ' '
 
-local Plug = vim.fn['plug#']
-vim.call('plug#begin')
+--
+-- Plugins loaded with lazy.nvim
+--
 
--- solarized color scheme
-Plug 'altercation/vim-colors-solarized'
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- add git markers to gutter to indicate new lines, etc
-Plug 'airblade/vim-gitgutter'
+plugins = {
+  {
+    'goolord/alpha-nvim',
+    dependencies = {
+        'nvim-tree/nvim-web-devicons',
+        'nvim-lua/plenary.nvim'
+    },
+    config = function ()
+        require'alpha'.setup(require'alpha.themes.theta'.config)
+    end
+  },
+  {
+    'morhetz/gruvbox',
+    config = function()
+      -- load the colorscheme here
+      vim.cmd.colorscheme('gruvbox')
+      -- Configuration for Solarized
+      --set background=dark
+      --let g:solarized_termcolors=256
+      --colorscheme solarized
+      vim.g.gruvbox_contrast_dark='hard'
+    end,
+  },
+  {
+    'neoclide/coc.nvim',
+    branch = 'release',
+    config = function()
+      -- COC autocomplete. Use <TAB> to autocomplete
+      -- Make <CR> to accept selected completion item or notify coc.nvim to format
+      -- <C-g>u breaks current undo, please make your own choice
+      -- vim.map.set('i', '<silent><expr>', '<CR> coc#pum#visible() ? coc#pum#confirm()\: "<C-g>u<CR><c-r>=coc#on_enter()<CR>"')
+      vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true, silent = true })
+    end
+  },
+  -- solarized color scheme
+  { 'altercation/vim-colors-solarized' },
 
--- Solve git conflicts
-Plug 'rhysd/conflict-marker.vim'
+  -- add git markers to gutter to indicate new lines, etc
+  { 'airblade/vim-gitgutter' },
 
--- Change status line
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+  -- Solve git conflicts
+  { 'rhysd/conflict-marker.vim' },
 
--- Ctrl-p
-Plug 'ctrlpvim/ctrlp.vim'
+  -- Change status line
+  {
+    'vim-airline/vim-airline',
+    dependencies = {
+      'vim-airline/vim-airline-themes',
+    },
+    config = function()
+      -- Configuracion de tabs para airlie
+      vim.g["airline#extensions#tabline#enabled"] = 1
+      vim.g["airline#extensions#tabline#formatter"] = 'unique_tail'
+      vim.g["airline_theme"] = 'wombat'
 
--- Asynchronous Lint Engine (ALE)
-Plug 'w0rp/ale'
+      -- Powerline configuration
+      vim.g.airline_powerline_fonts = 1
 
--- Javascript syntax highlighting and indentation
-Plug 'pangloss/vim-javascript'
+      -- powerline symbols
+      vim.g.airline_left_sep = ''
+      vim.g.airline_left_alt_sep = ''
+      vim.g.airline_right_sep = ''
+      vim.g.airline_right_alt_sep = ''
+      vim.g.airline_symbols.branch = ''
+      vim.g.airline_symbols.colnr = ' ℅:'
+      vim.g.airline_symbols.readonly = ''
+      vim.g.airline_symbols.linenr = ' :'
+      vim.g.airline_symbols.maxlinenr = '☰ '
+      vim.g.airline_symbols.dirty='⚡'
+      vim.g.airline_symbols.branch = '⎇'
+      vim.g.airline_symbols.linenr = '¶'
 
--- JS + JSX: https://github.com/MaxMEllon/vim-jsx-pretty
-Plug 'yuezk/vim-js'
-Plug 'maxmellon/vim-jsx-pretty'
+    end,
+  },
 
--- TSX (Typescript + React) support
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
+  -- Ctrl-p
+  { 'ctrlpvim/ctrlp.vim' },
 
--- Another nice colorscheme: https://github.com/morhetz/gruvbox/wiki/Configuration
-Plug 'morhetz/gruvbox'
+  -- Asynchronous Lint Engine (ALE)
+  { 'w0rp/ale' },
 
--- Markdown
-Plug 'plasticboy/vim-markdown'
+  -- Javascript syntax highlighting and indentation
+  { 'pangloss/vim-javascript' },
 
--- indent lines
-Plug 'yggdroot/indentline'
+  -- JS + JSX: https://github.com/MaxMEllon/vim-jsx-pretty
+  { 'yuezk/vim-js' },
+  { 'maxmellon/vim-jsx-pretty' },
 
--- For autocomplete
-Plug('neoclide/coc.nvim', {branch = 'release'})
+  -- TSX (Typescript + React) support
+  { 'leafgarland/typescript-vim' },
+  { 'peitalin/vim-jsx-typescript' },
 
--- Tagalong: open/close HTML tags
-Plug 'AndrewRadev/tagalong.vim'
+  -- Markdown
+  { 'plasticboy/vim-markdown' },
 
--- Autoclose HTML tags
-Plug 'alvan/vim-closetag'
+  -- indent lines
+  { 'yggdroot/indentline' },
 
--- Nerdtree
-Plug 'scrooloose/nerdtree'
+  -- Tagalong: open/close HTML tags
+  { 'AndrewRadev/tagalong.vim' },
 
--- Support for dustjs
-Plug 'jimmyhchan/dustjs.vim'
+  -- Autoclose HTML tags
+  { 'alvan/vim-closetag' },
 
--- For on the fly grep
-Plug 'wsdjeg/FlyGrep.vim'
+  -- Nerdtree
+  { 'scrooloose/nerdtree' },
 
--- Prosession session management
-Plug 'tpope/vim-obsession'
-Plug 'dhruvasagar/vim-prosession'
+  -- Support for dustjs
+  { 'jimmyhchan/dustjs.vim' },
 
--- JSON with Comment
-Plug 'kevinoid/vim-jsonc'
+  -- For on the fly grep
+  { 'wsdjeg/FlyGrep.vim' },
 
--- Show marks on margin
-Plug 'kshenoy/vim-signature'
+  -- Prosession session management
+  {
+    'dhruvasagar/vim-prosession',
+    dependencies = {
+      'tpope/vim-obsession'
+    }
+  },
 
--- Syntax highlight for Twig
-Plug 'qbbr/vim-twig'
+  -- JSON with Comment
+  { 'kevinoid/vim-jsonc' },
 
--- Syntax highlight for Blade
-Plug 'jwalton512/vim-blade'
+  -- Show marks on margin
+  { 'kshenoy/vim-signature' },
 
--- Syntax highlight renpy
-Plug 'chaimleib/vim-renpy'
+  -- Syntax highlight for Twig
+  { 'qbbr/vim-twig' },
 
--- Telscope
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
+  -- Syntax highlight for Blade
+  { 'jwalton512/vim-blade' },
 
--- We recommend updating the parsers on update
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
+  -- Syntax highlight renpy
+  { 'chaimleib/vim-renpy' },
 
--- Nord colorscheme
-Plug 'arcticicestudio/nord-vim'
+  -- Telscope
+  { 'nvim-lua/plenary.nvim' },
+  { 'nvim-telescope/telescope.nvim' },
 
--- Harpoon
-Plug 'nvim-lua/plenary.nvim' -- don't forget to add this one if you don't have it yet!
-Plug 'ThePrimeagen/harpoon'
+  -- We recommend updating the parsers on update
+  --{('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'}) },
 
--- Kickasm syntax
-Plug 'gryf/kickass-syntax-vim'
+  -- Harpoon
+  { 'nvim-lua/plenary.nvim' }, -- don't forget to add this one if you don't have it yet!
+  { 'ThePrimeagen/harpoon' },
 
--- GLSL syntax
-Plug 'tikhomirov/vim-glsl'
+  -- Kickasm syntax
+  { 'gryf/kickass-syntax-vim' },
 
-vim.call('plug#end')
+  -- GLSL syntax
+  { 'tikhomirov/vim-glsl' },
+
+  -- Codeium
+  {
+    'Exafunction/codeium.vim',
+    config = function ()
+      -- Change '<C-g>' here to any keycode you like.
+      vim.keymap.set('i', '<C-g>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-;>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+      vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+    end
+  },
+
+  -- Noice
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
+  },
+
+  -- Highlight TODO comments
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  }
+}
+require("lazy").setup(plugins, opts)
 
 --
 -- CONFIGURATION
@@ -112,13 +223,6 @@ vim.call('plug#end')
 
 -- Enable syntax highlighting
 vim.cmd('syntax enable')
-
--- Configuration for Solarized
---set background=dark
---let g:solarized_termcolors=256
---colorscheme solarized
-vim.g.gruvbox_contrast_dark='hard'
-vim.cmd.colorscheme('gruvbox')
 
 -- Show line numbers
 vim.o.number = true
@@ -132,10 +236,9 @@ vim.o.incsearch  = true
 
 -- default tabs and spaces handling
 vim.o.expandtab    = true
-vim.o.tabstop      = 4
-vim.o.softtabstop  = 4
-vim.o.shiftwidth   = 4
-
+vim.o.tabstop      = 2
+vim.o.softtabstop  = 2
+vim.o.shiftwidth   = 2
 
 -- CtrlP (new fuzzy finder)
 vim.g.ctrlp_map = ',e'
@@ -162,7 +265,7 @@ vim.o.timeoutlen = 200
 
 -- tabs / indent exceptions
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "javascript, javascriptreact, javascript.jsx, html, blade, twig",
+  pattern = "javascript, javascriptreact, javascript.jsx, html, blade, twig, php",
   callback = function(args)
     vim.o.tabstop      = 2
     vim.o.softtabstop  = 2
@@ -196,14 +299,6 @@ vim.g.tagalong_additional_filetypes = {'html', 'xml', 'jsx', 'eruby', 'ejs', 'ec
 
 -- Configure closetag
 vim.g.closetag_filetypes = 'javascript,jsx,javascriptreact,html,xhtml,phtml'
-
--- Powerline configuration
-vim.g.airline_powerline_fonts = 1
-
--- Configuracion de tabs para airlie
-vim.g["airline#extensions#tabline#enabled"] = 1
-vim.g["airline#extensions#tabline#formatter"] = 'unique_tail'
-vim.g["airline_theme"] = 'wombat'
 
 -- set filetypes as typescriptreact
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
@@ -242,12 +337,6 @@ vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
 vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
 vim.keymap.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
 
--- COC autocomplete. Use <TAB> to autocomplete
--- Make <CR> to accept selected completion item or notify coc.nvim to format
--- <C-g>u breaks current undo, please make your own choice
--- vim.map.set('i', '<silent><expr>', '<CR> coc#pum#visible() ? coc#pum#confirm()\: "<C-g>u<CR><c-r>=coc#on_enter()<CR>"')
-vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { expr = true, silent = true })
-
 -- Git conflict resolver
 -- disable the default highlight group
 vim.g.conflict_marker_highlight_group = ''
@@ -262,8 +351,23 @@ vim.g.conflict_marker_end   = '^>>>>>>> .*$'
 --highlight ConflictMarkerEnd guibg=#2f628e
 --highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
-
-
+--
+-- Show whitespaces
+--
+vim.o.termguicolors = true
+vim.o.mouse = ''
+vim.cmd [[syn on]]
+vim.g.show_whitespace = 1
+if vim.g.show_whitespace then
+  local ag = vim.api.nvim_create_augroup('show_whitespace', { clear = true })
+  vim.api.nvim_create_autocmd('Syntax', {
+    pattern = '*',
+    command = [[syntax match Tab /\v\t/ containedin=ALL | syntax match TrailingWS /\v\s\ze\s*$/ containedin=ALL]],
+    group = ag,
+  })
+  vim.cmd [[highlight Tab ctermbg=240 ctermfg=240 guibg=Grey50 guifg=Grey50]]
+  vim.cmd [[highlight TrailingWS ctermbg=203 ctermfg=203 guibg=IndianRed1 guifg=IndianRed1]]
+end
 
 --[[
 
@@ -273,7 +377,7 @@ vim.g.conflict_marker_end   = '^>>>>>>> .*$'
 if exists('g:GtkGuiLoaded')
   " some code here
   call rpcnotify(1, 'Gui', 'Font', 'Monoid Regular 10')
-  let g:GuiInternalClipboard = 1 
+  let g:GuiInternalClipboard = 1
 endif
 
 -- ----------------------------------------------------------------------------------
@@ -515,3 +619,5 @@ highlight ConflictMarkerCommonAncestorsHunk guibg=#754a81
 
 
 ]]--
+
+-- vim: se ts=2 sw=2 ai expandtab:
