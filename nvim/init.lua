@@ -37,7 +37,7 @@ plugins = {
     'morhetz/gruvbox',
     config = function()
       -- load the colorscheme here
-      vim.cmd.colorscheme('gruvbox')
+      -- vim.cmd.colorscheme('gruvbox')
       -- Configuration for Solarized
       --set background=dark
       --let g:solarized_termcolors=256
@@ -59,11 +59,29 @@ plugins = {
   -- solarized color scheme
   { 'altercation/vim-colors-solarized' },
 
+  -- catppuccin color scheme
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    config = function()
+      require('catppuccin').setup({
+        integrations = {
+          treesitter = true
+        }
+      })
+      vim.cmd.colorscheme('catppuccin-mocha')
+    end,
+  },
+
   -- add git markers to gutter to indicate new lines, etc
   { 'airblade/vim-gitgutter' },
 
   -- Solve git conflicts
   { 'rhysd/conflict-marker.vim' },
+
+  -- fzf integration
+  --{ 'junegunn/fzf', build = './install --all' },
+  --{ 'junegunn/fzf.vim' },
 
   -- Change status line
   {
@@ -175,6 +193,47 @@ plugins = {
   -- GLSL syntax
   { 'tikhomirov/vim-glsl' },
 
+  -- GOLang
+  {
+    'williamboman/mason.nvim',
+    opts = {
+      ensure_installed = {
+        'gopls'
+      }
+    }
+  },
+
+  {
+    "ray-x/go.nvim",
+    dependencies = {  -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = {"CmdlineEnter"},
+    ft = {"go", 'gomod'},
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      --require("lspconfig").gopls.setup {}
+    end
+  },
+
+  {
+    "ray-x/navigator.lua",
+    config = function()
+      require("navigator").setup({
+        --mason = true
+      })
+    end
+  },
+
   -- Codeium
   {
     'Exafunction/codeium.vim',
@@ -188,21 +247,21 @@ plugins = {
   },
 
   -- Noice
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      -- add any options here
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    }
-  },
+  --{
+  --  "folke/noice.nvim",
+  --  event = "VeryLazy",
+  --  opts = {
+  --    -- add any options here
+  --  },
+  --  dependencies = {
+  --    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --    "MunifTanjim/nui.nvim",
+  --    -- OPTIONAL:
+  --    --   `nvim-notify` is only needed, if you want to use the notification view.
+  --    --   If not available, we use `mini` as the fallback
+  --    "rcarriga/nvim-notify",
+  --  }
+  --},
 
   -- Highlight TODO comments
   {
@@ -365,7 +424,7 @@ if vim.g.show_whitespace then
     command = [[syntax match Tab /\v\t/ containedin=ALL | syntax match TrailingWS /\v\s\ze\s*$/ containedin=ALL]],
     group = ag,
   })
-  vim.cmd [[highlight Tab ctermbg=240 ctermfg=240 guibg=Grey50 guifg=Grey50]]
+  --vim.cmd [[highlight Tab ctermbg=240 ctermfg=240 guibg=Grey50 guifg=Grey50]]
   vim.cmd [[highlight TrailingWS ctermbg=203 ctermfg=203 guibg=IndianRed1 guifg=IndianRed1]]
 end
 
