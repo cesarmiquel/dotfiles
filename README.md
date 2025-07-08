@@ -6,12 +6,14 @@ This repo has my Tmux and NeoVim configuration files.
 
 These are my most used TMux bindings:
 
+- You can list all session with `tmux list-sessions`
+- You can create a new session by exiting tmux with `c-b d` (detach) and then `tmux new -s <session-name>` which creates the session and attaches to it
+- `c-b c`: Create new window in the current session
 - `c-w`: View all panes / windows
 - `c-b c-j`: fzf to a pane / window (using `bin/find-pane.sh`)
-- `c-b ,`: rename pane
+- `c-b ,`: rename window
+- `c-b %`: Split window into two vertical panes
 - `c-b z`: Switch between split panes
-- `c-b %`: Split pane vertically
-- `c-b c`: Create new window
 
 ## Vim Bindings
 
