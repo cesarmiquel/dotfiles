@@ -27,6 +27,19 @@ These are my most important neovim bindings:
 - `v i <key>`: select text between `<key>` where `<key>` can be `'`, `"`,  `(`
 - `<leader>` is mapped to the space key in my config
 
+## Powerline
+
+- To install powerline you need to install `pipx` (`sudo apt install pipx`)
+- Install powerline with: `pipx install powerline-status`
+- Edit `.bashrc` and add the following:
+
+POWERLINE_REPOSITORY_ROOT=/home/miquel/.local/share/pipx/venvs/powerline-status/lib/python3.12/site-packages
+POWERLINE_CONFIG_COMMAND=/home/miquel/.local/share/pipx/venvs/powerline-status/bin/powerline-config
+. ${POWERLINE_REPOSITORY_ROOT}/powerline/bindings/bash/powerline.sh
+
+- Check the python version (in this case `python3.12`) and make sure those paths exists
+- Source your `.bashrc`
+
 ## References
 
 - [Nice complete Neovim config](https://github.com/adriankarlen/nvim/)
