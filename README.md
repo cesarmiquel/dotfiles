@@ -29,16 +29,14 @@ These are my most important neovim bindings:
 
 ## Powerline
 
-- To install powerline you need to install `pipx` (`sudo apt install pipx`)
-- Install powerline with: `pipx install powerline-status`
-- Edit `.bashrc` and add the following:
+- Install `powerline`` and `powerline-gitstatus` with `sudo apt get <package>`
+- Link configuration: `ln -sf /home/miquel/Develop/dotfiles/powerline ~/.config/powerline`
+- Add the following lines to your `.bashrc` file:
 
-POWERLINE_REPOSITORY_ROOT=/home/miquel/.local/share/pipx/venvs/powerline-status/lib/python3.12/site-packages
-POWERLINE_CONFIG_COMMAND=/home/miquel/.local/share/pipx/venvs/powerline-status/bin/powerline-config
+POWERLINE_REPOSITORY_ROOT=/usr/share
+POWERLINE_CONFIG_COMMAND=/usr/bin/powerline-config
 . ${POWERLINE_REPOSITORY_ROOT}/powerline/bindings/bash/powerline.sh
 
-- Check the python version (in this case `python3.12`) and make sure those paths exists
-- Source your `.bashrc`
 
 ## References
 
