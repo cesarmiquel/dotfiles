@@ -29,13 +29,15 @@ These are my most important neovim bindings:
 
 ## Powerline
 
-- Install `powerline`` and `powerline-gitstatus` with `sudo apt get <package>`
+- Install `powerline` and `powerline-gitstatus` with `sudo apt get <package>`
 - Link configuration: `ln -sf /home/miquel/Develop/dotfiles/powerline ~/.config/powerline`
 - Add the following lines to your `.bashrc` file:
 
+```
 POWERLINE_REPOSITORY_ROOT=/usr/share
 POWERLINE_CONFIG_COMMAND=/usr/bin/powerline-config
 . ${POWERLINE_REPOSITORY_ROOT}/powerline/bindings/bash/powerline.sh
+```
 
 
 ## References
