@@ -27,6 +27,9 @@ These are my most important neovim bindings:
 - `v i <key>`: select text between `<key>` where `<key>` can be `'`, `"`,  `(`
 - `<leader>` is mapped to the space key in my config
 - `<leader>gg` to access lazygit from inside the terminal
+- `<leader>H` add current buffer to your Harpoon list
+- `<leader>h` show harpoon list
+- `<leader>1` - `<leader>5` select harpoon list item
 
 ## Powerline
 
@@ -47,6 +50,8 @@ There are several external software packages you need installed. Here is the lis
 - `fd` in Ubuntu installed via: `sudo apt install fd-find`
 - `fd` RipGrep. In Ubuntu installed via: `sudo apt install ripgrep`
 - `fzf` in Ubuntu installed via: `sudo apt install fzf`
+- `rg` in Ubuntu installed via: `sudo apt install ripgrep`
+- `wl-clipboard` in Ubuntu installed via: `sudo apt install wl-clipboard` Needed to copy from vim buffer to system clipboard
 
 ## References
 

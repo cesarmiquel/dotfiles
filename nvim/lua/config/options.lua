@@ -18,6 +18,9 @@ opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2
 
+-- Make yank commands copy to system clipboard
+clipboard = "unnamedplus"
+
 -- Disable smoothscroll if available
 if vim.fn.has("nvim-0.10") == 1 then
   opt.smoothscroll = true
